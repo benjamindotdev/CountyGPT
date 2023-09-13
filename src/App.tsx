@@ -18,7 +18,7 @@ function App() {
   })
 
   return (
-    <div className='flex flex-col justify-center items-center w-screen h-screen rounded-lg gap-8 shadow-lg'>
+    <div className='flex flex-col justify-center items-center w-screen h-screen rounded-lg gap-8 '>
       <h1 className="p-6 font-bold uppercase text-primary text-5xl">Demographic</h1>
       <blockquote className="italic text-secondary text-2xl">the statistical characteristics of human populations used especially to identify markets</blockquote>
       <div className='flex flex-col gap-8'>
@@ -55,7 +55,6 @@ function App() {
             <p className='text-primary text-2xl'>Hey <strong>{user.name}</strong>! You are a <strong>{user.age}</strong> year old <strong>{user.gender}</strong> who lives in <strong>{user.location}</strong>.</p>
             <button className="btn btn-primary text-primary hover:text-secondary w-6/12" type="submit">Confirm</button>
           </div>
-            
         }
       </div>
     </div>
