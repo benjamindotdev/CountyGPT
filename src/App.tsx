@@ -17,17 +17,17 @@ function App() {
     location: ""
   })
 
-  const ageAsNumber = Number(user.age);
+
 
 
   return (
-    <>
-      <div className='flex flex-col justify-center items-center w-screen h-screen bg-slate-400 m-32 rounded-lg'>
-        <h1 className="p-6 shadow-lg">Demographic</h1>
-        <div className='grid grid-cols-2 gap-3 '>
+    <div className='flex flex-col justify-center items-center w-screen h-screen rounded-lg gap-4 shadow-lg'>
+      <h1 className="p-6  text-left font-bold uppercase">Demographic</h1>
+      <blockquote className="italic">the statistical characteristics of human populations used especially to identify markets</blockquote>
+      <div>
+        <div className='grid grid-cols-2 gap-3 text-black'>
           <label htmlFor='name' className=''>Name</label>
-          <input className='w-100 bg-slate-50 rounded-lg' value={user.name} name="name" onChange={(e) => setUser({...user, name: e.target.value})}/>
-          <h2>{user.name}</h2>
+          <input className='w-100 bg-slate-50 rounded-lg ' value={user.name} name="name" onChange={(e) => setUser({...user, name: e.target.value})}/>
         </div>
         <div className='grid grid-cols-2 gap-3'>
           <label htmlFor='name'>Age</label>
@@ -35,14 +35,26 @@ function App() {
         </div>
         <div className='grid grid-cols-2 gap-3 '>
           <label htmlFor='name'>Gender</label>
-          <input className='w-100 bg-slate-50 rounded-lg' value={user.gender} name="name" onChange={(e) => setUser({...user, gender: e.target.value})}/>
+          <select className='w-100 bg-slate-50 rounded-lg' value={user.gender} name="name" onChange={(e) => setUser({...user, gender: e.target.value})}>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="non-binary">Non-binary</option>
+          </select>
         </div>
         <div className='grid grid-cols-2 gap-3 '>
           <label htmlFor='name'>Location</label>
-          <input className='w-100 bg-slate-50 rounded-lg'  value={user.location} name="location" onChange={(e) => setUser({...user, location: e.target.value})}/>
+          <select className='w-100 bg-slate-50 rounded-lg'  value={user.location} name="location" onChange={(e) => setUser({...user, location: e.target.value})}>
+            <option value="UK">UK</option>
+          </select>
         </div>
       </div>
-    </>
+      <div>
+        {
+          user.name && user.age && user.gender && user.location &&
+            <p className='text-white'>Hey {user.name}! You are a {user.age} year old {user.gender} who lives in {user.location}</p>
+        }
+      </div>
+    </div>
   )
 }
 
