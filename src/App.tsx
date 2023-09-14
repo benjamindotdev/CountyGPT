@@ -104,9 +104,9 @@ function App() {
               <select className='input input-primary w-full max-w-xs text-secondary' value={user.state} name="location" onChange={(e) => setUser({ ...user, county: e.target.value })}>
                 <option disabled selected value=""></option>
                 {
-                  results.filter((result:any) => result[0].split(", ")[1] == user.state).sort().map(result => {
+                  results.filter((result:any) => result[0].split(", ")[1] == user.state).sort().map((result:any) => {
                     return (
-                      <option key={result[1] + result[2]} value={result[0]}>{result[0]}</option>
+                      <option key={result[1] + result[2]} value={result[0]}>{result[0].split(", ")[0]}</option>
                     )
                   })
                 }
