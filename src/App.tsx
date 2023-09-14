@@ -22,8 +22,19 @@ function App() {
 
   const [ results, setResults ] = useState([])
   const [ showResults, setShowResults ] = useState(false)
+  const [ convertedArray, setConvertedArray ] = useState([])
 
   const key="6076306d0e086a5276c177cbfabedc34c2d34208";
+
+  const convertArrayToObject = (array:any, key:any) => {
+    const initialValue = {};
+    return array.reduce((obj:any, item:any) => {
+      return {
+        ...obj,
+        [item[key]]: item,
+      };
+    }, initialValue);
+  };
 
   const fetchData = async () => {
     const response = await fetch('https://api.census.gov/data/2019/pep/charagegroups?get=NAME&for=county:*&in=state:*&key='+key)
@@ -38,6 +49,8 @@ function App() {
       fetchData()
         .then((res) => {
           setResults(res)
+          setConvertedArray(convertArrayToObject(results, 'id'))
+          console.log(convertedArray)
         })
         .catch((e) => {
           console.log(e.message)
@@ -50,7 +63,7 @@ function App() {
     }
 
   return (
-    <div className='flex flex-col justify-center items-center w-screen h-screen rounded-lg gap-8 '>
+    <div className='flex flex-col justify-start items-center w-screen h-screen rounded-lg gap-8 '>
       <h1 className="p-6 font-bold uppercase text-primary text-5xl">Demographic</h1>
       <blockquote className="italic text-secondary text-2xl">the statistical characteristics of human populations used especially to identify markets</blockquote>
       <div className='flex flex-col gap-8'>
@@ -97,21 +110,23 @@ function App() {
                     )
                   })
                 }
-            </select>
-          </div>
+              </select>
+            </div>
         }
       </div>
       <div>
-        {user.name && user.age && user.gender && user.state && user.county &&
-          <div className='flex flex-col gap-8 justify-center items-center'>
-            <p className='text-primary text-2xl'>Hey <strong>{user.name}</strong>! You are a <strong>{user.age}</strong> year old <strong>{user.gender}</strong> who lives in <strong>{user.county}</strong>.</p>
-            <button className="btn btn-primary text-primary hover:text-secondary w-6/12" type="submit" onSubmit={handleSubmit}>Confirm</button>
-          </div>}
+        {
+          user.name && user.age && user.gender && user.state && user.county &&
+            <div className='flex flex-col gap-8 justify-center items-center'>
+              <p className='text-primary text-2xl'>Hey <strong>{user.name}</strong>! You are a <strong>{user.age}</strong> year old <strong>{user.gender}</strong> who lives in <strong>{user.county}</strong>.</p>
+              <button className="btn btn-primary text-primary hover:text-secondary w-6/12" type="submit" onSubmit={handleSubmit}>Confirm</button>
+            </div>
+        }
         {
           showResults &&
-          <div>
+          <div className='text-black'>
             {
-              results
+              convertedArray[0]
             }
           </div>
           }
