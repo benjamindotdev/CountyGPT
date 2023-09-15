@@ -12,7 +12,7 @@ type User = {
   county: any
 }
 
-function App() {
+export const App = () => {
 
   const [ user, setUser ] = useState<User>({
     name: "",
@@ -26,8 +26,6 @@ function App() {
   const [ showResults, setShowResults ] = useState(false)
   const [ ageGroup, setAgeGroup ] = useState<Number>(0)
 
-  const key="6076306d0e086a5276c177cbfabedc34c2d34208";
-
   const fetchData = async (api:string) => {
     const response = await fetch(api)
     if (!response.ok) {
@@ -37,9 +35,13 @@ function App() {
     }
   }
 
+  console.log(import.meta.env.VITE_CHATGPT_API_KEY)
+
   useEffect(() => {
+    const censusKey = import.meta.env.VITE_CENSUS_API_KEY;
+    const chatGPTKey= import.meta.env.VITE_CHATGPT_API_KEY;
   if (user.state) {
-    fetchData('https://api.census.gov/data/2019/pep/charagegroups?get=NAME&for=county:*&in=state:' + user.state + '&key=' + key)
+    fetchData('https://api.census.gov/data/2019/pep/charagegroups?get=NAME&for=county:*&in=state:' + user.state[1] + '&key=' + censusKey)
         .then((res) => {
           setResults(res)
         })
@@ -49,7 +51,7 @@ function App() {
     }
     if (user.county) {
       console.log(user)
-      fetchData('https://api.census.gov/data/2019/pep/charagegroups?get=NAME,POP&AGEGROUP=' + user.age[1] + '&SEX=' + user.gender[1] + '&for=county:' + user.county[2] + '&in=state:' + user.state[1] + '&key=' + key)
+      fetchData('https://api.census.gov/data/2019/pep/charagegroups?get=NAME,POP&AGEGROUP=' + user.age[1] + '&SEX=' + user.gender[1] + '&for=county:' + user.county[2] + '&in=state:' + user.state[1] + '&key=' + censusKey)
           .then((res) => {
             setResults(res)
           })
@@ -69,7 +71,7 @@ function App() {
       <h1 className="p-6 font-bold uppercase text-primary text-5xl">Demographic</h1>
       <blockquote className="italic text-secondary text-2xl">the statistical characteristics of human populations used especially to identify markets</blockquote>
       <div className='flex flex-col gap-8'>
-        <div className='grid grid-cols-2  text-black items-center'>
+        <div className='grid grid-cols-2 text-black items-center'>
           <label className="text-lg text-accent" htmlFor='name'>Name</label>
           <input className='input input-primary w-full max-w-xs text-secondary' value={user.name} name="name" onChange={(e) => setUser({ ...user, name: e.target.value })} />
         </div>
@@ -146,7 +148,6 @@ function App() {
               <h2 className=''>{user.gender[0]}</h2>
               <h2 className=''>{user.county[0]}, {user.state[0]}</h2>
               {JSON.stringify(results)}
-              
             </div>
             {JSON.stringify(user)}
           </div>
@@ -155,5 +156,3 @@ function App() {
     </div>
   )
 }
-
-export default App
