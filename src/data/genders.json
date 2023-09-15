@@ -1,5 +1,5 @@
 [
-    ["Both male and female", "00"],
-    ["Male", "01"],
-    ["Female", "02"]
+    ["Both male and female", "0"],
+    ["Male", "1"],
+    ["Female", "2"]
 ]

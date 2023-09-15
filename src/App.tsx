@@ -5,11 +5,11 @@ import genders from './data/genders.json'
 import './App.css'
 
 type User = {
-  name: string
-  age: string
-  gender: string
-  state: string
-  county: string
+  name: any
+  age: any
+  gender: any
+  state: any
+  county: any
 }
 
 function App() {
@@ -48,16 +48,16 @@ function App() {
         });
     }
     if (user.county) {
+      console.log(user)
       fetchData('https://api.census.gov/data/2019/pep/charagegroups?get=NAME,POP&AGEGROUP=' + user.age[1] + '&SEX=' + user.gender[1] + '&for=county:' + user.county[2] + '&in=state:' + user.state[1] + '&key=' + key)
           .then((res) => {
-            console.log(res)
             setResults(res)
           })
           .catch((e) => {
             console.log(e.message)
           });
       }
-  }, [user])
+  }, [user.state, user.county])
 
     const handleSubmit = (e:any) => {
       e.prevent.default();
@@ -75,7 +75,7 @@ function App() {
         </div>
         <div className='grid grid-cols-2 items-center'>
           <label className="text-lg text-accent" htmlFor='name'>Age</label>
-          <select className='input input-primary w-full max-w-xs text-secondary' value={user.age} name="age" onChange={(e) => setUser({ ...user, age: e.target.value })}>
+          <select className='input input-primary w-full max-w-xs text-secondary' value={user.age} name="age" onChange={(e) => setUser({ ...user, age: e.target.value.split(",") })}>
             <option disabled value=""></option>
               {
                 ageGroups.map((group:any) => {
@@ -88,7 +88,7 @@ function App() {
         </div>
         <div className='grid grid-cols-2 items-center'>
           <label className="text-lg text-accent" htmlFor='name'>Gender</label>
-          <select className='input input-primary w-full max-w-xs text-secondary' value={user.gender} name="name" onChange={(e) => setUser({ ...user, gender: e.target.value })}>
+          <select className='input input-primary w-full max-w-xs text-secondary' value={user.gender} name="name" onChange={(e) => setUser({ ...user, gender: e.target.value.split(",") })}>
             <option disabled value=""></option>
             {
               genders.map(gender => {
@@ -101,7 +101,7 @@ function App() {
         </div>
         <div className='grid grid-cols-2 items-center'>
           <label className="text-lg text-accent" htmlFor='name'>State</label>
-          <select className='input input-primary w-full max-w-xs text-secondary' value={user.state} name="location" onChange={(e) => setUser({ ...user, state: e.target.value })}>
+          <select className='input input-primary w-full max-w-xs text-secondary' value={user.state} name="location" onChange={(e) => setUser({ ...user, state: e.target.value.split(",") })}>
             <option disabled value=""></option>
             {
               states.map(state => {
@@ -116,7 +116,7 @@ function App() {
           user.state &&
             <div className='grid grid-cols-2 items-center'>
               <label className="text-lg text-accent" htmlFor='name'>County</label>
-              <select className='input input-primary w-full max-w-xs text-secondary' value={user.state} name="location" onChange={(e) => setUser({ ...user, county: e.target.value })}>
+              <select className='input input-primary w-full max-w-xs text-secondary' value={user.state} name="location" onChange={(e) => setUser({ ...user, county: e.target.value.split(",") })}>
                 <option disabled value=""></option>
                 {
                   results.sort().map((county:any) => {
@@ -142,11 +142,13 @@ function App() {
           <div className='text-black card shadow-xl p-16'>
             <div className='card-body'>
             <h1 className='card-title'>{user.name}</h1>
-              <h2 className=''>{user.age.split(",")[0]}</h2>
-              <h2 className=''>{user.gender.split(",")[0]}</h2>
-              <h2 className=''>{user.county.split(",")[0]}, {user.state.split(",")[0]}</h2>
+              <h2 className=''>{user.age[0]}</h2>
+              <h2 className=''>{user.gender[0]}</h2>
+              <h2 className=''>{user.county[0]}, {user.state[0]}</h2>
+              {JSON.stringify(results)}
+              
             </div>
-
+            {JSON.stringify(user)}
           </div>
           }
       </div>
