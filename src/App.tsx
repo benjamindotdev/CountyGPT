@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import  states  from './data/states.json'
-import  ageGroups  from './data/ageGroups.json'
+import states from './data/states.json'
+import ageGroups from './data/ageGroups.json'
+import genders from './data/genders.json'
 import './App.css'
 
 type User = {
   name: string
-  age: any
+  age: string
   gender: string
   state: string
   county: string
@@ -47,7 +48,7 @@ function App() {
         });
     }
     if (user.county) {
-      fetchData('https://api.census.gov/data/2019/pep/charagegroups?get=NAME,POP&AGEGROUP=' + user.age + '&SEX=' + user.gender + '&for=county:' + user.county + '&in=state:' + user.state + '&key=' + key)
+      fetchData('https://api.census.gov/data/2019/pep/charagegroups?get=NAME,POP&AGEGROUP=' + user.age[1] + '&SEX=' + user.gender[1] + '&for=county:' + user.county[2] + '&in=state:' + user.state[1] + '&key=' + key)
           .then((res) => {
             console.log(res)
             setResults(res)
@@ -64,7 +65,7 @@ function App() {
     }
 
   return (
-    <div className='flex flex-col justify-start items-center w-screen h-screen rounded-lg gap-8 '>
+    <div className='flex flex-col justify-start items-center w-screen h-screen rounded-lg gap-16 '>
       <h1 className="p-6 font-bold uppercase text-primary text-5xl">Demographic</h1>
       <blockquote className="italic text-secondary text-2xl">the statistical characteristics of human populations used especially to identify markets</blockquote>
       <div className='flex flex-col gap-8'>
@@ -77,9 +78,9 @@ function App() {
           <select className='input input-primary w-full max-w-xs text-secondary' value={user.age} name="age" onChange={(e) => setUser({ ...user, age: e.target.value })}>
             <option disabled value=""></option>
               {
-                ageGroups.map(group => {
+                ageGroups.map((group:any) => {
                   return (
-                    <option key={group[1]} value={group[1]}>{group[0]}</option>
+                    <option key={group[1]} value={group}>{group[0]}</option>
                   )
                 })
               }
@@ -89,8 +90,13 @@ function App() {
           <label className="text-lg text-accent" htmlFor='name'>Gender</label>
           <select className='input input-primary w-full max-w-xs text-secondary' value={user.gender} name="name" onChange={(e) => setUser({ ...user, gender: e.target.value })}>
             <option disabled value=""></option>
-            <option value="01">Male</option>
-            <option value="02">Female</option>
+            {
+              genders.map(gender => {
+                return (
+                  <option key={gender[1]} value={gender}>{gender[0]}</option>
+                )
+              })
+            }
           </select>
         </div>
         <div className='grid grid-cols-2 items-center'>
@@ -100,7 +106,7 @@ function App() {
             {
               states.map(state => {
                 return (
-                  <option key={state[1]} value={state[1]}>{state[0]}</option>
+                  <option key={state[1]} value={state}>{state[0]}</option>
                 )
               })
             }
@@ -116,7 +122,7 @@ function App() {
                   results.sort().map((county:any) => {
                     console.log(county)
                     return (
-                      <option key={county[1] + county[2]} value={county[2]}>{county[0].split(", ")[0]}</option>
+                      <option key={county[1] + county[2]} value={county}>{county[0].split(", ")[0]}</option>
                     )
                   })
                 }
@@ -128,17 +134,19 @@ function App() {
         {
           user.name && user.age && user.gender && user.state && user.county &&
             <div className='flex flex-col gap-8 justify-center items-center'>
-              <p className='text-primary text-2xl'>Hey <strong>{user.name}</strong>! You are a <strong>{user.age}</strong> year old <strong>{user.gender}</strong> who lives in <strong>{user.county}</strong>.</p>
               <button className="btn btn-primary text-primary hover:text-secondary w-6/12" type="submit" onSubmit={handleSubmit}>Confirm</button>
             </div>
         }
         {
 
-          <div className='text-black'>
-            {
-              <h1 className='text-black'>{JSON.stringify(user)}</h1>
-              
-            }
+          <div className='text-black card shadow-xl p-16'>
+            <div className='card-body'>
+            <h1 className='card-title'>{user.name}</h1>
+              <h2 className=''>{user.age.split(",")[0]}</h2>
+              <h2 className=''>{user.gender.split(",")[0]}</h2>
+              <h2 className=''>{user.county.split(",")[0]}, {user.state.split(",")[0]}</h2>
+            </div>
+
           </div>
           }
       </div>
