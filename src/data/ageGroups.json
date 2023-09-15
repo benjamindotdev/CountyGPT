@@ -1,4 +1,5 @@
 [
+    ["All ages", "00"],
     ["Age 0 to 4 years", "01"],
     ["Age 5 to 9 years", "02"],
     ["Age 10 to 14 years", "03"],
@@ -16,5 +17,18 @@
     ["Age 70 to 74 years", "15"],
     ["Age 75 to 79 years", "16"],
     ["Age 80 to 84 years", "17"],
-    ["Age 85 and older", "18"]
+    ["Age 85 and older", "18"],
+    ["Under 18 years", "19"],
+    ["5 to 13 years", "20"],
+    ["14 to 17 years", "21"],
+    ["18 to 64 years  ", "22"],
+    ["18 to 24 years", "23"],
+    ["25 to 44 years", "24"],
+    ["45 to 64 years", "25"],
+    ["65 years and over", "26"],
+    ["85 years and over", "27"],
+    ["16 years and over", "28"],
+    ["18 years and over", "29"],
+    ["15 to 44 years", "30"],
+    ["Median age", "31"]
 ]
