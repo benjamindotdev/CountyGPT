@@ -12,6 +12,14 @@ type User = {
   county: any
 }
 
+type UpdatedResults = {
+  key: ''
+  state: ''
+  county: ''
+  gender: ''
+  ageGroup: ''
+}[]
+
 export const App = () => {
 
   const [ user, setUser ] = useState<User>({
@@ -23,6 +31,7 @@ export const App = () => {
   })
 
   const [ results, setResults ] = useState([])
+  const [ updatedResults, setUpdatedResults ] = useState<UpdatedResults>([])
   const [ showResults, setShowResults ] = useState(false)
   const [ ageGroup, setAgeGroup ] = useState<Number>(0)
 
@@ -34,8 +43,6 @@ export const App = () => {
       return response.json()
     }
   }
-
-  console.log(import.meta.env.VITE_CHATGPT_API_KEY)
 
   useEffect(() => {
     const censusKey = import.meta.env.VITE_CENSUS_API_KEY;
@@ -49,8 +56,10 @@ export const App = () => {
           console.log(e.message)
         });
     }
+
+    // REMOVE
+    // get all data for state from 1st api call, mutate results array to user county and demographics afterwards on the fly (faster than multiple API calls)
     if (user.county) {
-      console.log(user)
       fetchData('https://api.census.gov/data/2019/pep/charagegroups?get=NAME,POP&AGEGROUP=' + user.age[1] + '&SEX=' + user.gender[1] + '&for=county:' + user.county[2] + '&in=state:' + user.state[1] + '&key=' + censusKey)
           .then((res) => {
             setResults(res)
@@ -59,6 +68,15 @@ export const App = () => {
             console.log(e.message)
           });
       }
+        results.map((result:any) => {
+          console.log(result[0], user.county[0] + "," + user.county[1])
+          if (result[0] === user.county[0] + "," + user.county[1]) {
+            console.log("yes")
+            setUpdatedResults([...updatedResults, result.name ])
+          }
+          console.log(updatedResults)
+          return updatedResults;
+        })
   }, [user.state, user.county])
 
     const handleSubmit = (e:any) => {
@@ -122,9 +140,8 @@ export const App = () => {
                 <option disabled value=""></option>
                 {
                   results.sort().map((county:any) => {
-                    console.log(county)
                     return (
-                      <option key={county[1] + county[2]} value={county}>{county[0].split(", ")[0]}</option>
+                      <option key={county[1] + county[2]} value={county}>{county[0]}</option>
                     )
                   })
                 }
@@ -148,6 +165,7 @@ export const App = () => {
               <h2 className=''>{user.gender[0]}</h2>
               <h2 className=''>{user.county[0]}, {user.state[0]}</h2>
               {JSON.stringify(results)}
+              {JSON.stringify(updatedResults)}
             </div>
             {JSON.stringify(user)}
           </div>
