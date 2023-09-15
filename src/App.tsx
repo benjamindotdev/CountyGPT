@@ -1,5 +1,6 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import  states  from './data/states.json'
+import  ageGroups  from './data/ageGroups.json'
 import './App.css'
 
 type User = {
@@ -22,22 +23,12 @@ function App() {
 
   const [ results, setResults ] = useState([])
   const [ showResults, setShowResults ] = useState(false)
-  const [ convertedArray, setConvertedArray ] = useState([])
+  const [ ageGroup, setAgeGroup ] = useState<Number>(0)
 
   const key="6076306d0e086a5276c177cbfabedc34c2d34208";
 
-  const convertArrayToObject = (array:any, key:any) => {
-    const initialValue = {};
-    return array.reduce((obj:any, item:any) => {
-      return {
-        ...obj,
-        [item[key]]: item,
-      };
-    }, initialValue);
-  };
-
-  const fetchData = async () => {
-    const response = await fetch('https://api.census.gov/data/2019/pep/charagegroups?get=NAME&for=county:*&in=state:*&key='+key)
+  const fetchData = async (api:string) => {
+    const response = await fetch(api)
     if (!response.ok) {
       throw new Error('Data coud not be fetched!')
     } else {
@@ -46,16 +37,26 @@ function App() {
   }
 
   useEffect(() => {
-      fetchData()
+  if (user.state) {
+    fetchData('https://api.census.gov/data/2019/pep/charagegroups?get=NAME&for=county:*&in=state:' + user.state + '&key=' + key)
         .then((res) => {
           setResults(res)
-          setConvertedArray(convertArrayToObject(results, 'id'))
-          console.log(convertedArray)
         })
         .catch((e) => {
           console.log(e.message)
-        })
-    }, [user.state])
+        });
+    }
+    if (user.county) {
+      fetchData('https://api.census.gov/data/2019/pep/charagegroups?get=NAME,POP&AGEGROUP=' + user.age + '&SEX=' + user.gender + '&for=county:' + user.county + '&in=state:' + user.state + '&key=' + key)
+          .then((res) => {
+            console.log(res)
+            setResults(res)
+          })
+          .catch((e) => {
+            console.log(e.message)
+          });
+      }
+  }, [user])
 
     const handleSubmit = (e:any) => {
       e.prevent.default();
@@ -73,25 +74,33 @@ function App() {
         </div>
         <div className='grid grid-cols-2 items-center'>
           <label className="text-lg text-accent" htmlFor='name'>Age</label>
-          <input className='input input-primary w-full max-w-xs text-secondary' type="number" value={user.age} name="age" onChange={(e) => setUser({ ...user, age: e.target.value })} />
+          <select className='input input-primary w-full max-w-xs text-secondary' value={user.age} name="age" onChange={(e) => setUser({ ...user, age: e.target.value })}>
+            <option disabled value=""></option>
+              {
+                ageGroups.map(group => {
+                  return (
+                    <option key={group[1]} value={group[1]}>{group[0]}</option>
+                  )
+                })
+              }
+          </select>
         </div>
         <div className='grid grid-cols-2 items-center'>
           <label className="text-lg text-accent" htmlFor='name'>Gender</label>
           <select className='input input-primary w-full max-w-xs text-secondary' value={user.gender} name="name" onChange={(e) => setUser({ ...user, gender: e.target.value })}>
-            <option disabled selected value=""></option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="non-binary">Non-binary</option>
+            <option disabled value=""></option>
+            <option value="01">Male</option>
+            <option value="02">Female</option>
           </select>
         </div>
         <div className='grid grid-cols-2 items-center'>
           <label className="text-lg text-accent" htmlFor='name'>State</label>
           <select className='input input-primary w-full max-w-xs text-secondary' value={user.state} name="location" onChange={(e) => setUser({ ...user, state: e.target.value })}>
-            <option disabled selected value=""></option>
+            <option disabled value=""></option>
             {
               states.map(state => {
                 return (
-                  <option key={state[1]} value={state[0]}>{state[0]}</option>
+                  <option key={state[1]} value={state[1]}>{state[0]}</option>
                 )
               })
             }
@@ -102,11 +111,12 @@ function App() {
             <div className='grid grid-cols-2 items-center'>
               <label className="text-lg text-accent" htmlFor='name'>County</label>
               <select className='input input-primary w-full max-w-xs text-secondary' value={user.state} name="location" onChange={(e) => setUser({ ...user, county: e.target.value })}>
-                <option disabled selected value=""></option>
+                <option disabled value=""></option>
                 {
-                  results.filter((result:any) => result[0].split(", ")[1] == user.state).sort().map((result:any) => {
+                  results.sort().map((county:any) => {
+                    console.log(county)
                     return (
-                      <option key={result[1] + result[2]} value={result[0]}>{result[0].split(", ")[0]}</option>
+                      <option key={county[1] + county[2]} value={county[2]}>{county[0].split(", ")[0]}</option>
                     )
                   })
                 }
@@ -123,10 +133,11 @@ function App() {
             </div>
         }
         {
-          showResults &&
+
           <div className='text-black'>
             {
-              convertedArray[0]
+              <h1 className='text-black'>{JSON.stringify(user)}</h1>
+              
             }
           </div>
           }
