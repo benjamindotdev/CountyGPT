@@ -13,11 +13,9 @@ type User = {
 }
 
 type UpdatedResults = {
-  key: ''
-  state: ''
-  county: ''
-  gender: ''
-  ageGroup: ''
+  key: number
+  state: string
+  county: string
 }[]
 
 export const App = () => {
@@ -34,6 +32,8 @@ export const App = () => {
   const [ updatedResults, setUpdatedResults ] = useState<UpdatedResults>([])
   const [ showResults, setShowResults ] = useState(false)
   const [ ageGroup, setAgeGroup ] = useState<Number>(0)
+
+  let nextId = 0;
 
   const fetchData = async (api:string) => {
     const response = await fetch(api)
@@ -69,10 +69,10 @@ export const App = () => {
           });
       }
         results.map((result:any) => {
-          console.log(result[0], user.county[0] + "," + user.county[1])
+          console.log(result, result[0], user.county[0] + "," + user.county[1])
           if (result[0] === user.county[0] + "," + user.county[1]) {
             console.log("yes")
-            setUpdatedResults([...updatedResults, result.name ])
+            setUpdatedResults([...updatedResults, { key: nextId++, state: result[1], county: result[0] } ])
           }
           console.log(updatedResults)
           return updatedResults;
