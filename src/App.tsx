@@ -69,13 +69,14 @@ export const App = () => {
           });
       }
         results.map((result:any) => {
-          console.log(result, result[0], user.county[0] + "," + user.county[1])
-          if (result[0] === user.county[0] + "," + user.county[1]) {
-            console.log("yes")
-            setUpdatedResults([...updatedResults, { key: nextId++, state: result[1], county: result[0] } ])
-          }
-          console.log(updatedResults)
-          return updatedResults;
+
+          console.log(result[0], user.county[0] + "," + user.county[1])
+          //if (result[0] === user.county[0] + "," + user.county[1]) {
+          //  console.log("yes")
+          //  setUpdatedResults([...updatedResults, { key: nextId++, state: result[1], county: result[0] } ])
+          //}
+          console.log(result[0] !== user.county[0] + "," + user.county[1])
+          return setUpdatedResults(results.filter((result:any) => { return result[0] === user.county[0] + "," + user.county[1] }))
         })
   }, [user.state, user.county])
 
@@ -163,11 +164,9 @@ export const App = () => {
             <h1 className='card-title'>{user.name}</h1>
               <h2 className=''>{user.age[0]}</h2>
               <h2 className=''>{user.gender[0]}</h2>
-              <h2 className=''>{user.county[0]}, {user.state[0]}</h2>
-              {JSON.stringify(results)}
+              <h2 className=''>{user.county[0]}, {user.county[1]}</h2>
               {JSON.stringify(updatedResults)}
             </div>
-            {JSON.stringify(user)}
           </div>
           }
       </div>
