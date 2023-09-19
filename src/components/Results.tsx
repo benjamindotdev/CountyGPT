@@ -16,7 +16,7 @@ export const Results = (props: any) => {
 
     const location = props.user.county[0] + "," + props.user.county[1];
 
-    const [messages, setMessages] = useState([
+    const [messages, setMessages] = useState<any>([
         {
           message: "Hello, I'm ChatGPT! Ask me anything!",
           sentTime: "just now",
@@ -27,10 +27,11 @@ export const Results = (props: any) => {
       const [isTyping, setIsTyping] = useState(false);
 
       const handleSendRequest = async (message: any) => {
-        const newMessage = {
+        const newMessage:any = {
           message,
           direction: 'outgoing',
           sender: "me",
+          position: 'normal'
         };
 
         setMessages((prevMessages: any) => [...prevMessages, newMessage]);
@@ -43,6 +44,8 @@ export const Results = (props: any) => {
             const chatGPTResponse = {
               message: content,
               sender: "ChatGPT",
+              direction: 'incoming',
+              position: 'normal'
             };
             setMessages((prevMessages: any) => [...prevMessages, chatGPTResponse]);
           }
@@ -100,7 +103,7 @@ export const Results = (props: any) => {
                                 typingIndicator={isTyping ? <TypingIndicator content="ChatGPT is typing" /> : null}
                             >
 
-                                {messages.map((message, i) => {
+                                {messages.map((message:any, i:any) => {
                                     return (
                                         <Message
                                             key={i}
@@ -119,7 +122,7 @@ export const Results = (props: any) => {
                         <div id="buttons" className='flex flex-col gap-2'>
                             <button
                                 className='bg-primary text-white p-2 shadow-sm rounded-lg'
-                                onClick={() => handleSendRequest("What else can you tell me about" + location + "?" )}
+                                onClick={() => handleSendRequest("What else can you tell me about " + location + "?" )}
                             >
                                 What else can you tell me about {location}?
                             </button>

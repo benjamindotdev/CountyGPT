@@ -50,12 +50,6 @@ export const InputForm = (props: any) => {
                     </select>
                 </div>
             }
-            {
-            props.user.name && props.user.age && props.user.gender && props.user.state && props.user.county &&
-                <div className='flex flex-col gap-8 justify-center items-center'>
-                    <button className="btn btn-primary text-primary hover:text-secondary w-64" type="submit" onSubmit={props.handleSubmit}>Confirm</button>
-                </div>
-            }
       </form>
     )
 
