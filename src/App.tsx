@@ -57,25 +57,19 @@ export const App = () => {
         });
     }
 
-    // REMOVE
-    // get all data for state from 1st api call, mutate results array to user county and demographics afterwards on the fly (faster than multiple API calls)
+//get 2nd api call working
+
     if (user.county) {
-      fetchData('https://api.census.gov/data/2019/pep/charagegroups?get=NAME,POP&AGEGROUP=' + user.age[1] + '&SEX=' + user.gender[1] + '&for=county:' + user.county[2] + '&in=state:' + user.state[1] + '&key=' + censusKey)
+      fetchData('https://api.census.gov/data/2019/pep/charagegroups?get=NAME,POP,AGEGROUP=' + user.age[1] + ',SEX=' + user.gender[1] + '&for=county:' + user.county[2] + '&in=state:' + user.state[1] + '&key=' + censusKey)
           .then((res) => {
-            setResults(res)
+            setUpdatedResults(res)
           })
           .catch((e) => {
             console.log(e.message)
           });
       }
         results.map((result:any) => {
-
           console.log(result[0], user.county[0] + "," + user.county[1])
-          //if (result[0] === user.county[0] + "," + user.county[1]) {
-          //  console.log("yes")
-          //  setUpdatedResults([...updatedResults, { key: nextId++, state: result[1], county: result[0] } ])
-          //}
-          console.log(result[0] !== user.county[0] + "," + user.county[1])
           return setUpdatedResults(results.filter((result:any) => { return result[0] === user.county[0] + "," + user.county[1] }))
         })
   }, [user.state, user.county])
@@ -137,12 +131,12 @@ export const App = () => {
           user.state &&
             <div className='grid grid-cols-2 items-center'>
               <label className="text-lg text-accent" htmlFor='name'>County</label>
-              <select className='input input-primary w-full max-w-xs text-secondary' value={user.state} name="location" onChange={(e) => setUser({ ...user, county: e.target.value.split(",") })}>
+              <select className='input input-primary w-full max-w-xs text-secondary' value={user.county} name="location" onChange={(e) => setUser({ ...user, county: e.target.value.split(",") })}>
                 <option disabled value=""></option>
                 {
                   results.sort().map((county:any) => {
                     return (
-                      <option key={county[1] + county[2]} value={county}>{county[0]}</option>
+                      <option key={county[1] + county[2] + Math.floor(Math.random())} value={county}>{county[0]}</option>
                     )
                   })
                 }
@@ -158,7 +152,7 @@ export const App = () => {
             </div>
         }
         {
-
+          user.county &&
           <div className='text-black card shadow-xl p-16'>
             <div className='card-body'>
             <h1 className='card-title'>{user.name}</h1>
