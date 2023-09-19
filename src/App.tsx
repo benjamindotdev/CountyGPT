@@ -54,10 +54,10 @@ export const App = () => {
   }, [user.state, user.county])
 
   return (
-    <main id="app" className='flex flex-col justify-start items-center w-screen h-screen gap-16 py-16'>
+    <main id="app" className='flex flex-col justify-start items-center w-screen h-screen lg:gap-16 py-16'>
       <section id="header" className='flex flex-col gap-6 justify-start items-start w-9/12'>
         <h1 className=" font-bold uppercase text-primary text-5xl">COUNTYGPT</h1>
-        <blockquote className="italic text-secondary text-2xl">Let AI help you find stuff to do in your neck of the woods</blockquote>
+        <blockquote className="italic text-secondary lg:text-2xl">Let AI help you find stuff to do in your neck of the woods</blockquote>
       </section>
       <InputForm user={user} setUser={setUser} results={results} setResults={setResults} />
       {

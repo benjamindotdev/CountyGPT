@@ -87,11 +87,11 @@ export const Results = (props: any) => {
       }
 
     return (
-        <div id='results' className="flex flex-col gap-8 w-9/12 justify-center items-center card shadow-md rounded-3xl p-16'">
+        <div id='results' className="flex flex-col gap-8 sm:w-11/12 lg:w-9/12 justify-center items-center card shadow-md rounded-3xl p-16'">
         {
             <>
                 <div className='card-body'>
-                    <div className='card-title flex justify-between'>
+                    <div className='card-title flex sm:flex-col lg:flex-row justify-between'>
                         <h1 className=''>{props.user.name}</h1>
                         <h2 className='text-primary'>{props.user.age[0]}</h2>
                         <h2 className='text-secondary'>{props.user.county[0]}, {props.user.county[1]}</h2>
@@ -122,12 +122,6 @@ export const Results = (props: any) => {
                         <div id="buttons" className='flex flex-col gap-2'>
                             <button
                                 className='bg-primary text-white p-2 shadow-sm rounded-lg'
-                                onClick={() => handleSendRequest("What else can you tell me about " + location + "?" )}
-                            >
-                                What else can you tell me about {location}?
-                            </button>
-                            <button
-                                className='bg-primary text-white p-2 shadow-sm rounded-lg'
                                 onClick={() => handleSendRequest("Which country has the same population as " + location + "?" )}
                             >
                                 Which country has the same population as {location}?
@@ -137,6 +131,12 @@ export const Results = (props: any) => {
                                 onClick={() => handleSendRequest("Is " + location + " a nice place to live?" )}
                             >
                                 Is {location} a nice place to live?
+                            </button>
+                            <button
+                                className='bg-primary text-white p-2 shadow-sm rounded-lg'
+                                onClick={() => handleSendRequest("What else can you tell me about " + location + "?" )}
+                            >
+                                What else can you tell me about {location}?
                             </button>
                         </div>
                 </div>
