@@ -1,4 +1,4 @@
-import { useState, useEffect }  from 'react';
+import { useState }  from 'react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import {
   MainContainer,
@@ -7,11 +7,14 @@ import {
   Message,
   MessageInput,
   TypingIndicator,
+  Avatar,
 } from '@chatscope/chat-ui-kit-react';
 
 const chatGPTKey= import.meta.env.VITE_CHATGPT_API_KEY;
 
 export const Results = (props: any) => {
+
+    const firstMessage = "What's there for a" + props.user.age[0] + " old to do in " + props.user.county[0] + ", " + props.user.county[1] + "?"
 
     const [messages, setMessages] = useState([
         {
@@ -20,18 +23,19 @@ export const Results = (props: any) => {
           sender: "ChatGPT",
         },
       ]);
+
       const [isTyping, setIsTyping] = useState(false);
-    
+
       const handleSendRequest = async (message: any) => {
         const newMessage = {
           message,
           direction: 'outgoing',
-          sender: "user",
+          sender: props.user.name,
         };
-    
+
         setMessages((prevMessages: any) => [...prevMessages, newMessage]);
         setIsTyping(true);
-    
+
         try {
           const response = await processMessageToChatGPT([...messages, newMessage]);
           const content = response.choices[0]?.message?.content;
@@ -48,13 +52,13 @@ export const Results = (props: any) => {
           setIsTyping(false);
         }
       };
-    
+
       async function processMessageToChatGPT(chatMessages: any) {
         const apiMessages = chatMessages.map((messageObject: any) => {
           const role = messageObject.sender === "ChatGPT" ? "assistant" : "user";
           return { role, content: messageObject.message };
         });
-    
+
         const apiRequestBody = {
           "model": "gpt-3.5-turbo",
           "messages": [
@@ -62,7 +66,7 @@ export const Results = (props: any) => {
             ...apiMessages,
           ],
         };
-    
+
         const response = await fetch("https://api.openai.com/v1/chat/completions", {
           method: "POST",
           headers: {
@@ -71,37 +75,49 @@ export const Results = (props: any) => {
           },
           body: JSON.stringify(apiRequestBody),
         });
-    
+
         return response.json();
       }
-    
+
+      if(messages.length === 1) {
+        handleSendRequest("What's there for a" + props.user.age[0] + " old to do in " + props.user.county[0] + ", " + props.user.county[1] + "?")
+      }
+
     return (
         <div id='results' className="flex flex-col gap-8 w-9/12 justify-center items-center card shadow-md rounded-lg p-16'">
         {
-          props.user.county &&
-          <>
-          <div className=''>
-                    <div className='card-body'>
-                        <h1 className='card-title'>{props.user.name}</h1>
-                        <h2 className=''>{props.user.age[0]}</h2>
-                        <h2 className=''>{props.user.gender[0]}</h2>
-                        <h2 className=''>{props.user.county[0]}, {props.user.county[1]}</h2>
-                        {JSON.stringify(props.updatedResults)}
+            <>
+                <div className='card-body'>
+                    <div className='card-title flex justify-between'>
+                        <h1 className=''>{props.user.name}</h1>
+                        <h2 className='text-primary'>{props.user.age[0]}</h2>
+                        <h2 className='text-secondary'>{props.user.county[0]}, {props.user.county[1]}</h2>
                     </div>
-                </div><MainContainer>
+                    <MainContainer>
                         <ChatContainer>
                             <MessageList
                                 scrollBehavior="smooth"
                                 typingIndicator={isTyping ? <TypingIndicator content="ChatGPT is typing" /> : null}
                             >
+
                                 {messages.map((message, i) => {
-                                    console.log(message);
-                                    return <Message key={i} model={message} />;
+                                    return (
+                                        <Message
+                                            key={i}
+                                            model={message}
+                                            avatarPosition={message.sender === "ChatGPT" ? "tl" : "tr"}
+                                        >
+                                            <Avatar src={message.sender === "ChatGPT" ? "ChatGPT_logo.svg.png" : "icon.svg"} name="Emily" />
+                                            <Message.Footer sender={message.sender} sentTime="just now" />
+                                        </Message>
+                                    )
                                 })}
                             </MessageList>
-                            <MessageInput placeholder="Send a Message" onSend={handleSendRequest} />
+                            <MessageInput placeholder={"What's there for a " + props.user.age[0].toLowerCase() + " to do in " + props.user.county[0] + ", " + props.user.county[1] + "?"} onSend={handleSendRequest} />
                         </ChatContainer>
-                    </MainContainer></>
+                    </MainContainer>
+                </div>
+            </>
           }
       </div>
     )

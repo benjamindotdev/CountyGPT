@@ -1,6 +1,5 @@
 import states from '../data/states.json'
 import ageGroups from '../data/ageGroups.json'
-import genders from '../data/genders.json'
 
 export const InputForm = (props: any) => {
     return (
@@ -19,19 +18,6 @@ export const InputForm = (props: any) => {
                             <option key={group[1]} value={group}>{group[0]}</option>
                         )
                         })
-                    }
-                </select>
-            </div>
-            <div className='grid grid-cols-2 items-center w-10/12'>
-                <label className="text-lg text-accent" htmlFor='name'>Gender</label>
-                <select className='input input-primary w-full max-w-xs text-secondary' value={props.user.gender} name="name" onChange={(e) => props.setUser({ ...props.user, gender: e.target.value.split(",") })}>
-                    <option disabled value=""></option>
-                    {
-                    genders.map((gender: string[]) => {
-                        return (
-                        <option key={gender[1]} value={gender}>{gender[0]}</option>
-                        )
-                    })
                     }
                 </select>
             </div>

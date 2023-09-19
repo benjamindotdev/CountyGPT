@@ -79,7 +79,10 @@ export const App = () => {
         <blockquote className="italic text-secondary text-2xl">the statistical characteristics of human populations used especially to identify markets</blockquote>
       </section>
       <InputForm user={user} setUser={setUser} results={results} setResults={setResults} handleSubmit={handleSubmit} />
-      <Results user={user} setUser={setUser} updatedResults={updatedResults} setUpdatedResults={setUpdatedResults} />
+      {
+        user.county[0] && user.name && user.county[1] && user.age &&
+          <Results user={user} setUser={setUser} updatedResults={updatedResults} setUpdatedResults={setUpdatedResults} />
+      }
     </main>
   )
 }
