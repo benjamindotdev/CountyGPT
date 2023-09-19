@@ -75,7 +75,7 @@ export const App = () => {
   }, [user.state, user.county])
 
     const handleSubmit = (e:any) => {
-      e.prevent.default();
+      e.preventDefault();
       setShowResults(true);
     }
 
@@ -83,7 +83,7 @@ export const App = () => {
     <div className='flex flex-col justify-start items-center w-screen h-screen rounded-lg gap-16 '>
       <h1 className="p-6 font-bold uppercase text-primary text-5xl">Demographic</h1>
       <blockquote className="italic text-secondary text-2xl">the statistical characteristics of human populations used especially to identify markets</blockquote>
-      <div className='flex flex-col gap-8'>
+      <form className='flex flex-col gap-8'>
         <div className='grid grid-cols-2 text-black items-center'>
           <label className="text-lg text-accent" htmlFor='name'>Name</label>
           <input className='input input-primary w-full max-w-xs text-secondary' value={user.name} name="name" onChange={(e) => setUser({ ...user, name: e.target.value })} />
@@ -143,16 +143,17 @@ export const App = () => {
               </select>
             </div>
         }
-      </div>
-      <div>
         {
           user.name && user.age && user.gender && user.state && user.county &&
             <div className='flex flex-col gap-8 justify-center items-center'>
-              <button className="btn btn-primary text-primary hover:text-secondary w-6/12" type="submit" onSubmit={handleSubmit}>Confirm</button>
+              <button className="btn btn-primary text-primary hover:text-secondary w-64" type="submit" onSubmit={handleSubmit}>Confirm</button>
             </div>
         }
+      </form>
+      <div>
+        
         {
-          user.county &&
+          showResults &&
           <div className='text-black card shadow-xl p-16'>
             <div className='card-body'>
             <h1 className='card-title'>{user.name}</h1>
