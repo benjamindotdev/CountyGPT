@@ -17,6 +17,8 @@ type UpdatedResults = {
   county: string
 }[]
 
+  const censusKey = import.meta.env.VITE_CENSUS_API_KEY;
+
 export const App = () => {
 
   const [ user, setUser ] = useState<User>({
@@ -41,8 +43,6 @@ export const App = () => {
   }
 
   useEffect(() => {
-    const censusKey = import.meta.env.VITE_CENSUS_API_KEY;
-    const chatGPTKey= import.meta.env.VITE_CHATGPT_API_KEY;
   if (user.state) {
     fetchData('https://api.census.gov/data/2019/pep/charagegroups?get=NAME&for=county:*&in=state:' + user.state[1] + '&key=' + censusKey)
         .then((res) => {
@@ -78,7 +78,7 @@ export const App = () => {
         <h1 className=" font-bold uppercase text-primary text-5xl">Demographic</h1>
         <blockquote className="italic text-secondary text-2xl">the statistical characteristics of human populations used especially to identify markets</blockquote>
       </section>
-      <InputForm user={user} setUser={setUser} results={results} setResults={setResults} handleSubmit={handleSubmit}/>
+      <InputForm user={user} setUser={setUser} results={results} setResults={setResults} handleSubmit={handleSubmit} />
       <Results user={user} setUser={setUser} updatedResults={updatedResults} setUpdatedResults={setUpdatedResults} />
     </main>
   )
