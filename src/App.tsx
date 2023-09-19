@@ -73,10 +73,10 @@ export const App = () => {
     }
 
   return (
-    <main id="app" className='flex flex-col justify-start items-center w-screen h-screen rounded-lg gap-32 '>
-      <section id="header" className='flex flex-col gap-6 justify-start items-start'>
-        <h1 className=" font-bold uppercase text-primary text-5xl">Demographic</h1>
-        <blockquote className="italic text-secondary text-2xl">the statistical characteristics of human populations used especially to identify markets</blockquote>
+    <main id="app" className='flex flex-col justify-start items-center w-screen h-screen gap-16 py-16'>
+      <section id="header" className='flex flex-col gap-6 justify-start items-start w-9/12'>
+        <h1 className=" font-bold uppercase text-primary text-5xl">COUNTYGPT</h1>
+        <blockquote className="italic text-secondary text-2xl">Let AI help you find stuff to do in your neck of the woods</blockquote>
       </section>
       <InputForm user={user} setUser={setUser} results={results} setResults={setResults} handleSubmit={handleSubmit} />
       {

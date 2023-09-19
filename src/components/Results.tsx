@@ -14,7 +14,7 @@ const chatGPTKey= import.meta.env.VITE_CHATGPT_API_KEY;
 
 export const Results = (props: any) => {
 
-    const location = props.user.county[0] + ", " + props.user.county[1];
+    const location = props.user.county[0] + "," + props.user.county[1];
 
     const [messages, setMessages] = useState([
         {
@@ -30,7 +30,7 @@ export const Results = (props: any) => {
         const newMessage = {
           message,
           direction: 'outgoing',
-          sender: props.user.name,
+          sender: "me",
         };
 
         setMessages((prevMessages: any) => [...prevMessages, newMessage]);
@@ -84,7 +84,7 @@ export const Results = (props: any) => {
       }
 
     return (
-        <div id='results' className="flex flex-col gap-8 w-9/12 justify-center items-center card shadow-md rounded-lg p-16'">
+        <div id='results' className="flex flex-col gap-8 w-9/12 justify-center items-center card shadow-md rounded-3xl p-16'">
         {
             <>
                 <div className='card-body'>
@@ -107,23 +107,33 @@ export const Results = (props: any) => {
                                             model={message}
                                             avatarPosition={message.sender === "ChatGPT" ? "tl" : "tr"}
                                         >
-                                            <Avatar src={message.sender === "ChatGPT" ? "ChatGPT_logo.svg.png" : "icon.svg"} name="Emily" />
-                                            <Message.Footer sender={message.sender} sentTime="just now" />
+                                            <Avatar src={message.sender === "ChatGPT" ? "ChatGPT_logo.svg.png" : "icon.svg"} name="icon" />
+                                            <Message.Footer sender={message.sender === "ChatGPT" ? "ChatGPT" : props.user.name} sentTime="just now" />
                                         </Message>
                                     )
                                 })}
                             </MessageList>
-                            <MessageInput placeholder={"What's there for a " + props.user.age[0].toLowerCase() + " to do in " + props.user.county[0] + ", " + props.user.county[1] + "?"} onSend={handleSendRequest} />
-                            
+                            <MessageInput placeholder={"Ask me something about " + location} onSend={handleSendRequest} />
                         </ChatContainer>
-                        
                     </MainContainer>
-                        <div className='flex flex-row'>
+                        <div id="buttons" className='flex flex-col gap-2'>
                             <button
-                                className='bg-primary text-secondary'
+                                className='bg-primary text-white p-2 shadow-sm rounded-lg'
                                 onClick={() => handleSendRequest("What else can you tell me about" + location + "?" )}
                             >
                                 What else can you tell me about {location}?
+                            </button>
+                            <button
+                                className='bg-primary text-white p-2 shadow-sm rounded-lg'
+                                onClick={() => handleSendRequest("Which country has the same population as " + location + "?" )}
+                            >
+                                Which country has the same population as {location}?
+                            </button>
+                            <button
+                                className='bg-primary text-white p-2 shadow-sm rounded-lg'
+                                onClick={() => handleSendRequest("Is " + location + " a nice place to live?" )}
+                            >
+                                Is {location} a nice place to live?
                             </button>
                         </div>
                 </div>

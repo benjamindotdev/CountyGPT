@@ -9,7 +9,8 @@ module.exports = {
         primary: "#E85D75",
         secondary: "#8D918B",
         accent1: "#C76D7E",
-        accent2: "#AD9B9A"
+        accent2: "#AD9B9A",
+        white: '#fff'
       }
     },
     fontFamily: {
