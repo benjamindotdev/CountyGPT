@@ -14,7 +14,7 @@ const chatGPTKey= import.meta.env.VITE_CHATGPT_API_KEY;
 
 export const Results = (props: any) => {
 
-    const firstMessage = "What's there for a" + props.user.age[0] + " old to do in " + props.user.county[0] + ", " + props.user.county[1] + "?"
+    const location = props.user.county[0] + ", " + props.user.county[1];
 
     const [messages, setMessages] = useState([
         {
@@ -80,7 +80,7 @@ export const Results = (props: any) => {
       }
 
       if(messages.length === 1) {
-        handleSendRequest("What's there for a" + props.user.age[0] + " old to do in " + props.user.county[0] + ", " + props.user.county[1] + "?")
+        handleSendRequest("What's there for a " + props.user.age[0].toLowerCase() + " old to do in " + props.user.county[0] + ", " + props.user.county[1] + "?")
       }
 
     return (
@@ -114,8 +114,18 @@ export const Results = (props: any) => {
                                 })}
                             </MessageList>
                             <MessageInput placeholder={"What's there for a " + props.user.age[0].toLowerCase() + " to do in " + props.user.county[0] + ", " + props.user.county[1] + "?"} onSend={handleSendRequest} />
+                            
                         </ChatContainer>
+                        
                     </MainContainer>
+                        <div className='flex flex-row'>
+                            <button
+                                className='bg-primary text-secondary'
+                                onClick={() => handleSendRequest("What else can you tell me about" + location + "?" )}
+                            >
+                                What else can you tell me about {location}?
+                            </button>
+                        </div>
                 </div>
             </>
           }
