@@ -91,8 +91,8 @@ export const Results = (props: any) => {
         {
             <>
                 <div className='card-body'>
-                    <div className='card-title flex sm:flex-col lg:flex-row justify-between'>
-                        <h1 className=''>{props.user.name}</h1>
+                    <div className='card-title flex sm:flex-col sm:gap-32 lg:flex-row justify-between'>
+                        <h1 className='sm:block'>{props.user.name}</h1>
                         <h2 className='text-primary'>{props.user.age[0]}</h2>
                         <h2 className='text-secondary'>{props.user.county[0]}, {props.user.county[1]}</h2>
                     </div>
